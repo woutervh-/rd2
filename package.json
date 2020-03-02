@@ -15,6 +15,9 @@
   },
   "author": "Wouter van Heeswijk",
   "license": "Apache-2.0",
+  "files": [
+    "lib/"
+  ],
   "peerDependencies": {
     "react": "^16.12.0"
   },
