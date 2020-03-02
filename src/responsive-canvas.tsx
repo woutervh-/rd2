@@ -5,7 +5,6 @@ interface Props {
     onDraw: (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement, abortSignal: AbortSignal) => void;
     className?: string;
     style?: React.CSSProperties;
-    canvasRef?: React.RefObject<HTMLCanvasElement>;
 }
 
 interface State {
