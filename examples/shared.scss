@@ -1,0 +1,66 @@
+@mixin axis {
+    position: relative;
+    overflow: visible;
+    width: 100%;
+    height: 100%;
+}
+
+@mixin top-axis {
+    & :global(.tick) {
+        & > text {
+            text-anchor: start;
+            transform-origin: 0 -0.5em;
+            transform: rotate(-45deg);
+        }
+    }
+}
+
+@mixin left-axis {
+    & :global(.tick) {
+        & > text {
+            text-anchor: end;
+            transform-origin: -0.5em 0;
+            transform: rotate(-45deg);
+        }
+    }
+}
+
+@mixin bottom-axis {
+    & :global(.tick) {
+        & > text {
+            text-anchor: end;
+            transform-origin: 0 0.5em;
+            transform: rotate(-45deg);
+        }
+    }
+}
+
+@mixin right-axis {
+    //
+}
+
+@mixin svg-plot {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(black, 0.2);
+}
+
+@mixin svg-plot-path {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+@mixin svg-plot-circle {
+    stroke: black;
+    stroke-width: 1px;
+    fill: steelblue;
+}
+
+@mixin canvas-plot {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(black, 0.2);
+}

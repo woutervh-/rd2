@@ -1,0 +1,38 @@
+@import "../../shared.scss";
+
+.chart {
+    display: grid;
+    grid-template-columns: 50px 200px;
+    grid-template-rows: 200px 50px;
+    grid-template-areas:
+        "left plot"
+        ". bottom";
+
+    & > .axis {
+        @include axis;
+
+        &.left {
+            grid-area: left;
+            @include left-axis;
+        }
+
+        &.bottom {
+            grid-area: bottom;
+            @include bottom-axis;
+        }
+    }
+
+    & > .plot {
+        grid-area: plot;
+        @include svg-plot;
+
+        & circle {
+            @include svg-plot-circle;
+
+            &:hover {
+                cursor: pointer;
+                fill: lightsteelblue;
+            }
+        }
+    }
+}

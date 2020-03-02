@@ -1,0 +1,26 @@
+@import "../../shared.scss";
+
+.chart {
+    display: grid;
+    grid-template-columns: 50px 200px;
+    grid-template-rows: 200px;
+    grid-template-areas: "left plot";
+
+    & > .axis {
+        @include axis;
+
+        &.left {
+            grid-area: left;
+            @include left-axis;
+        }
+    }
+
+    & > .plot {
+        grid-area: plot;
+        @include svg-plot;
+
+        & path {
+            @include svg-plot-path;
+        }
+    }
+}
