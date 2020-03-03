@@ -5,7 +5,7 @@ export interface Size {
 
 export class SizeObserver {
     private raf: number | null = null;
-    private previousSize: Size | null = null;
+    private currentSize: Size | null = null;
     private element: Element;
     private listeners: Set<(size: Size) => void> = new Set();
 
@@ -15,8 +15,8 @@ export class SizeObserver {
 
     private update = () => {
         const size = SizeObserver.getSize(this.element);
-        if (this.previousSize === null || this.previousSize.width !== size.width || this.previousSize.height !== size.height) {
-            this.previousSize = size;
+        if (this.currentSize === null || this.currentSize.width !== size.width || this.currentSize.height !== size.height) {
+            this.currentSize = size;
             this.fire('sizechange', size);
         }
 
@@ -34,7 +34,7 @@ export class SizeObserver {
             this.update();
         }
         this.listeners.add(handler);
-        handler(this.previousSize!);
+        handler(this.currentSize!);
         return this;
     }
 

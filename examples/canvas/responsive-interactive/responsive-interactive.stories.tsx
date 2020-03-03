@@ -17,6 +17,7 @@ export default { title: 'Examples - canvas' };
 export const responsiveInteractive = () => {
     const [transform, setTransform] = React.useState<D3Zoom.ZoomTransform>(D3Zoom.zoomIdentity);
     const zoomRef = React.useRef<D3Zoom.ZoomBehavior<HTMLElement, unknown> | null>(null);
+    const selectionRef = React.useRef<D3Selection.Selection<HTMLElement, unknown, null, undefined> | null>(null);
 
     const handleOverlayRef = React.useCallback(
         (element: HTMLElement | null) => {
@@ -25,30 +26,43 @@ export const responsiveInteractive = () => {
                 zoomRef.current = null;
             }
 
+            selectionRef.current = null;
             if (!element) {
                 return;
             }
+            selectionRef.current = D3Selection.select(element);
 
             const zoomed = () => {
                 // Global event is untyped. Refactor once https://github.com/d3/d3-selection/issues/191 is released.
                 const event = D3Selection.event as D3Zoom.D3ZoomEvent<HTMLCanvasElement, unknown>; // eslint-disable-line @typescript-eslint/consistent-type-assertions
-                // event.transform.
                 setTransform(event.transform);
             };
-            const selection: D3Selection.Selection<HTMLElement, unknown, null, undefined> = D3Selection.select(element);
             zoomRef.current = D3Zoom.zoom<HTMLElement, unknown>().on('zoom', zoomed);
-            zoomRef.current(selection);
+            zoomRef.current(selectionRef.current);
         },
         []
     );
 
-    const handleDraw = React.useCallback(
-        (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
-            if (zoomRef.current) {
-                // const currentTranslate = zoomRef.current.translateExtent();
-                // zoomRef.current = zoomRef.current.extent([[0, 0], [canvas.width, canvas.height]]);
+    const handleSizeChange = React.useCallback(
+        (size: Size, previousSize: Size | null) => {
+            if (!zoomRef.current || !selectionRef.current || !previousSize) {
+                return;
             }
 
+            const px = transform.x / previousSize.width;
+            const py = transform.y / previousSize.height;
+            const nx = px * size.width;
+            const ny = py * size.height;
+            const nt = D3Zoom.zoomIdentity.translate(nx, ny).scale(transform.k);
+            zoomRef.current.extent([[0, 0], [size.width, size.height]]);
+            zoomRef.current.transform(selectionRef.current, nt);
+            setTransform(nt);
+        },
+        [transform]
+    );
+
+    const handleDraw = React.useCallback(
+        (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
             let scaleX = D3Scale.scaleLinear().domain([0, 4]).range([0, canvas.width]);
             scaleX = transform.rescaleX(scaleX);
             let scaleY = D3Scale.scaleLinear().domain([0, 10]).range([canvas.height, 0]);
@@ -86,7 +100,7 @@ export const responsiveInteractive = () => {
     );
 
     return <div className={style.chart}>
-        <ResponsiveCanvas className={style.plot} onDraw={handleDraw} />
+        <ResponsiveCanvas className={style.plot} onDraw={handleDraw} onSizeChange={handleSizeChange} />
         <div ref={handleOverlayRef} className={style['plot-overlay']} />
         <ResponsiveAxis className={classNames(style.axis, style.left)} getAxis={getLeftAxis} placement="left" />
         <ResponsiveAxis className={classNames(style.axis, style.bottom)} getAxis={getBottomAxis} placement="bottom" />

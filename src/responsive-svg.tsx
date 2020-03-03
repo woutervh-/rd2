@@ -3,6 +3,7 @@ import { Size, SizeObserver } from './size-observer';
 
 interface Props {
     children: (size: Size) => React.ReactNode;
+    onSizeChange?: (size: Size, previousSize: Size | null) => void;
     className?: string;
     style?: React.CSSProperties;
 }
@@ -19,7 +20,12 @@ export class ResponsiveSVG extends React.PureComponent<Props, State> {
     };
 
     private handleSizeChange = (size: Size) => {
-        this.setState({ size });
+        const previousSize = this.state.size;
+        this.setState({ size }, () => {
+            if (this.props.onSizeChange) {
+                this.props.onSizeChange(size, previousSize);
+            }
+        });
     };
 
     private handleRef = (element: SVGSVGElement | null) => {

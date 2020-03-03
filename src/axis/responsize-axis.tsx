@@ -5,6 +5,7 @@ import { Size, SizeObserver } from '../size-observer';
 
 interface Props<Domain> {
     getAxis: (size: Size) => D3Axis.Axis<Domain>;
+    onSizeChange?: (size: Size, previousSize: Size | null) => void;
     placement: 'top' | 'left' | 'bottom' | 'right';
     className?: string;
     style?: React.CSSProperties;
@@ -32,7 +33,12 @@ export class ResponsiveAxis<Domain> extends React.PureComponent<Props<Domain>, S
     }
 
     private handleSizeChange = (size: Size) => {
-        this.setState({ size });
+        const previousSize = this.state.size;
+        this.setState({ size }, () => {
+            if (this.props.onSizeChange) {
+                this.props.onSizeChange(size, previousSize);
+            }
+        });
     };
 
     private handleContainerRef = (element: SVGElement | null) => {

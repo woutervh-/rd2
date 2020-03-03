@@ -3,9 +3,9 @@ import { Size, SizeObserver } from './size-observer';
 
 interface Props {
     onDraw: (context: CanvasRenderingContext2D, canvas: HTMLCanvasElement, abortSignal: AbortSignal) => void;
+    onSizeChange?: (size: Size, previousSize: Size | null) => void;
     className?: string;
     style?: React.CSSProperties;
-    canvasRef?: React.Ref<HTMLCanvasElement>;
 }
 
 interface State {
@@ -30,8 +30,6 @@ export class ResponsiveCanvas extends React.PureComponent<Props, State> {
             this.abortController = null;
         }
         const context = this.canvas.getContext('2d')!;
-        // context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.abortController = new AbortController();
         this.props.onDraw(context, this.canvas, this.abortController.signal);
     }
@@ -44,7 +42,12 @@ export class ResponsiveCanvas extends React.PureComponent<Props, State> {
     }
 
     private handleSizeChange = (size: Size) => {
-        this.setState({ size });
+        const previousSize = this.state.size;
+        this.setState({ size }, () => {
+            if (this.props.onSizeChange) {
+                this.props.onSizeChange(size, previousSize);
+            }
+        });
     };
 
     private handleRef = (element: HTMLCanvasElement | null) => {
