@@ -46,8 +46,12 @@ export class ResponsiveBrush<Datum> extends React.PureComponent<Props<Datum>, ne
         if (!this.eventedBrush) {
             return;
         }
-
         this.eventedBrush.extent([[0, 0], [size.width, size.height]]);
+
+        if (!this.selection) {
+            return;
+        }
+        this.selection.call(this.eventedBrush);
     };
 
     private handleStart = () => {
