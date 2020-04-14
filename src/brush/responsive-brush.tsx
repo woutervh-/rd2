@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as D3Brush from 'd3-brush';
 import * as D3Selection from 'd3-selection';
+import { Size, SizeObserver } from '../size-observer';
 
 interface Props<Datum> {
     brush: D3Brush.BrushBehavior<Datum>;
@@ -9,9 +10,10 @@ interface Props<Datum> {
     onEnd?: (event: D3Brush.D3BrushEvent<Datum>) => void;
 }
 
-export class Brush<Datum> extends React.PureComponent<Props<Datum>, never> {
+export class ResponsiveBrush<Datum> extends React.PureComponent<Props<Datum>, never> {
     private selection: D3Selection.Selection<SVGGElement, Datum, null, undefined> | null = null;
     private eventedBrush: D3Brush.BrushBehavior<Datum> | null = null;
+    private sizeObserver: SizeObserver | null = null;
 
     public componentDidUpdate(prevProps: Props<Datum>) {
         this.cleanupBrush();
@@ -23,12 +25,29 @@ export class Brush<Datum> extends React.PureComponent<Props<Datum>, never> {
     }
 
     private handleRef = (element: SVGGElement | null) => {
+        if (this.sizeObserver) {
+            this.sizeObserver.off('sizechange', this.handleSizeChange);
+            this.sizeObserver = null;
+        }
+
         this.selection = null;
         this.cleanupBrush();
         if (element) {
             this.selection = D3Selection.select(element);
             this.createBrush();
+
+            if (element.ownerSVGElement) {
+                this.sizeObserver = new SizeObserver(element.ownerSVGElement).on('sizechange', this.handleSizeChange);
+            }
         }
+    };
+
+    private handleSizeChange = (size: Size) => {
+        if (!this.eventedBrush) {
+            return;
+        }
+
+        this.eventedBrush.extent([[0, 0], [size.width, size.height]]);
     };
 
     private handleStart = () => {
