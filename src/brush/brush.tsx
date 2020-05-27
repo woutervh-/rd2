@@ -79,6 +79,12 @@ export class Brush<Datum> extends React.PureComponent<Props<Datum>, never> {
         }
     }
 
+    public clearSelection() {
+        if (this.eventedBrush && this.selection) {
+            this.eventedBrush.move(this.selection, null);
+        }
+    }
+
     public render() {
         return <g ref={this.handleRef} />;
     }
