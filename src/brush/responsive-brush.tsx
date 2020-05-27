@@ -102,6 +102,12 @@ export class ResponsiveBrush<Datum> extends React.PureComponent<Props<Datum>, ne
         }
     }
 
+    public clearSelection() {
+        if (this.eventedBrush && this.selection) {
+            this.eventedBrush.move(this.selection, null);
+        }
+    }
+
     public render() {
         return <g ref={this.handleRef} />;
     }
