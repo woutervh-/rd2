@@ -163,3 +163,45 @@ export const brushDraw = () => {
         </div>
     </React.Fragment>;
 };
+
+export const brushMountUnmount = () => {
+    const [active, setActive] = React.useState(false);
+
+    const scales = React.useMemo(
+        () => {
+            const scaleX = D3Scale.scaleLinear().domain([0, 10]).range([0, 200]);
+            const scaleY = D3Scale.scaleLinear().domain([0, 10]).range([200, 0]);
+            const axisLeft = D3Axis.axisLeft(scaleY);
+            const axisBottom = D3Axis.axisBottom(scaleX);
+            return { scaleX, scaleY, axisLeft, axisBottom };
+        },
+        []
+    );
+
+    return <React.Fragment>
+        <div style={{ display: 'grid', gridTemplateRows: '200px 50px', gridTemplateColumns: '50px 200px' }}>
+            <Axis axis={scales.axisLeft} placement="left" style={{ width: '50px', height: '200px', overflow: 'visible' }} />
+            <svg style={{ backgroundColor: 'rgba(0, 0, 0, 20%)' }} width={200} height={200}>
+                {
+                    active
+                        ? <Brush brush={d3Brush} />
+                        : null
+                }
+            </svg>
+            <div />
+            <Axis axis={scales.axisBottom} placement="bottom" style={{ width: '200px', height: '50px', overflow: 'visible' }} />
+        </div>
+        <div>
+            Drag rectangles in the chart above.
+        </div>
+        <div>
+            <button onClick={() => setActive(!active)}>
+                {
+                    active
+                        ? 'De-activate brush'
+                        : 'Activate brush'
+                }
+            </button>
+        </div>
+    </React.Fragment>;
+};

@@ -15,7 +15,7 @@ export class ResponsiveBrush<Datum> extends React.PureComponent<Props<Datum>, ne
     private eventedBrush: D3Brush.BrushBehavior<Datum> | null = null;
     private sizeObserver: SizeObserver | null = null;
 
-    public componentDidUpdate(prevProps: Props<Datum>) {
+    public componentDidUpdate() {
         this.cleanupBrush();
         this.createBrush();
     }

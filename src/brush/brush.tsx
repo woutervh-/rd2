@@ -13,7 +13,7 @@ export class Brush<Datum> extends React.PureComponent<Props<Datum>, never> {
     private selection: D3Selection.Selection<SVGGElement, Datum, null, undefined> | null = null;
     private eventedBrush: D3Brush.BrushBehavior<Datum> | null = null;
 
-    public componentDidUpdate(prevProps: Props<Datum>) {
+    public componentDidUpdate() {
         this.cleanupBrush();
         this.createBrush();
     }
