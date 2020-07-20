@@ -103,8 +103,16 @@ export class ResponsiveBrush<Datum> extends React.PureComponent<Props<Datum>, ne
     }
 
     public clearSelection() {
+        this.setSelection(null);
+    }
+
+    public setSelection(newSelection: D3Brush.BrushSelection | null): void {
         if (this.eventedBrush && this.selection) {
-            this.eventedBrush.move(this.selection, null);
+            if (newSelection) {
+                this.eventedBrush.move(this.selection, newSelection);
+            } else {
+                this.eventedBrush.move(this.selection, null);
+            }
         }
     }
 
