@@ -6,6 +6,7 @@ interface Props {
     onSizeChange?: (size: Size, previousSize: Size | null) => void;
     className?: string;
     style?: React.CSSProperties;
+    forwardedRef?: (instance: HTMLCanvasElement | null) => void;
 }
 
 interface State {
@@ -50,15 +51,18 @@ export class ResponsiveCanvas extends React.PureComponent<Props, State> {
         });
     };
 
-    private handleRef = (element: HTMLCanvasElement | null) => {
+    private handleRef = (instance: HTMLCanvasElement | null) => {
         if (this.sizeObserver) {
             this.sizeObserver.off('sizechange', this.handleSizeChange);
             this.sizeObserver = null;
         }
-        if (element) {
-            this.sizeObserver = new SizeObserver(element).on('sizechange', this.handleSizeChange);
+        if (instance) {
+            this.sizeObserver = new SizeObserver(instance).on('sizechange', this.handleSizeChange);
         }
-        this.canvas = element;
+        if (this.props.forwardedRef) {
+            this.props.forwardedRef(instance);
+        }
+        this.canvas = instance;
     };
 
     public render() {

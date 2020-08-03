@@ -6,6 +6,7 @@ interface Props {
     onSizeChange?: (size: Size, previousSize: Size | null) => void;
     className?: string;
     style?: React.CSSProperties;
+    forwardedRef?: (instance: SVGSVGElement | null) => void;
 }
 
 interface State {
@@ -28,13 +29,16 @@ export class ResponsiveSVG extends React.PureComponent<Props, State> {
         });
     };
 
-    private handleRef = (element: SVGSVGElement | null) => {
+    private handleRef = (instance: SVGSVGElement | null) => {
         if (this.sizeObserver) {
             this.sizeObserver.off('sizechange', this.handleSizeChange);
             this.sizeObserver = null;
         }
-        if (element) {
-            this.sizeObserver = new SizeObserver(element).on('sizechange', this.handleSizeChange);
+        if (instance) {
+            this.sizeObserver = new SizeObserver(instance).on('sizechange', this.handleSizeChange);
+        }
+        if (this.props.forwardedRef) {
+            this.props.forwardedRef(instance);
         }
     };
 
