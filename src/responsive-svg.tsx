@@ -51,7 +51,11 @@ export class ResponsiveSVG extends React.PureComponent<Props, State> {
     }
 
     public render() {
-        return <svg ref={this.handleRef} className={this.props.className} style={this.props.style}>
+        const viewBox = this.state.size
+            ? `0 0 ${this.state.size.width} ${this.state.size.height}`
+            : '0 0 0 0';
+
+        return <svg ref={this.handleRef} className={this.props.className} style={this.props.style} viewBox={viewBox}>
             {this.renderChildren()}
         </svg>;
     }
