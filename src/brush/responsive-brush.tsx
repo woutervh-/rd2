@@ -42,7 +42,7 @@ export class ResponsiveBrush<Datum> extends React.PureComponent<Props<Datum>, ne
         }
     };
 
-    private handleSizeChange = (size: Size, prevSize: Size | null) => {
+    private handleSizeChange = (size: Size) => {
         if (!this.eventedBrush) {
             return;
         }
@@ -53,26 +53,9 @@ export class ResponsiveBrush<Datum> extends React.PureComponent<Props<Datum>, ne
         }
         this.selection.call(this.eventedBrush);
 
-        if (!prevSize) {
-            return;
-        }
-        const node = this.selection.node();
-        if (!node) {
-            return;
-        }
-        const selection = D3Brush.brushSelection(node);
-
-        if (!selection) {
-            return;
-        }
-
-        const scaleX = size.width / prevSize.width;
-        const scaleY = size.height / prevSize.height;
-        if (Array.isArray(selection[0]) && Array.isArray(selection[1])) {
-            this.eventedBrush.move(this.selection, [[selection[0][0] * scaleX, selection[0][1] * scaleY], [selection[1][0] * scaleX, selection[1][1] * scaleY]]);
-        } else if (typeof selection[0] === 'number' && typeof selection[1] === 'number') {
-            this.eventedBrush.move(this.selection, [selection[0] * scaleX, selection[1] * scaleY]);
-        }
+        // We could scale the current selection based on the previous and current size.
+        // However, this makes little sense when the scales of a plot are not scaled exactly in the same way.
+        // It's left to the user to move the selection when the plot changes its scales.
     };
 
     private handleStart = () => {
