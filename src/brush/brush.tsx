@@ -91,6 +91,17 @@ export class Brush<Datum> extends React.PureComponent<Props<Datum>, never> {
         }
     }
 
+    public getSelection() {
+        if (!this.selection) {
+            return null;
+        }
+        const node = this.selection.node();
+        if (!node) {
+            return null;
+        }
+        return D3Brush.brushSelection(node);
+    }
+
     public render() {
         return <g ref={this.handleRef} />;
     }
