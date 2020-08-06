@@ -16,8 +16,9 @@ export class SizeObserver {
     private update = () => {
         const size = SizeObserver.getSize(this.element);
         if (this.currentSize === null || this.currentSize.width !== size.width || this.currentSize.height !== size.height) {
+            const prevSize = this.currentSize;
             this.currentSize = size;
-            this.fire('sizechange', size, this.currentSize);
+            this.fire('sizechange', size, prevSize);
         }
 
         this.raf = window.requestAnimationFrame(this.update);
