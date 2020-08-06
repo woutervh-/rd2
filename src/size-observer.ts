@@ -7,7 +7,7 @@ export class SizeObserver {
     private raf: number | null = null;
     private currentSize: Size | null = null;
     private element: Element;
-    private listeners: Set<(size: Size) => void> = new Set();
+    private listeners: Set<(size: Size, prevSize: Size | null) => void> = new Set();
 
     public constructor(element: Element) {
         this.element = element;
@@ -17,28 +17,28 @@ export class SizeObserver {
         const size = SizeObserver.getSize(this.element);
         if (this.currentSize === null || this.currentSize.width !== size.width || this.currentSize.height !== size.height) {
             this.currentSize = size;
-            this.fire('sizechange', size);
+            this.fire('sizechange', size, this.currentSize);
         }
 
         this.raf = window.requestAnimationFrame(this.update);
     };
 
-    private fire(event: 'sizechange', size: Size) {
+    private fire(event: 'sizechange', size: Size, prevSize: Size | null) {
         for (const listener of this.listeners) {
-            listener(size);
+            listener(size, prevSize);
         }
     }
 
-    public on(event: 'sizechange', handler: (size: Size) => void) {
+    public on(event: 'sizechange', handler: (size: Size, prevSize: Size | null) => void) {
         if (this.listeners.size <= 0) {
             this.update();
         }
         this.listeners.add(handler);
-        handler(this.currentSize!);
+        handler(this.currentSize!, null);
         return this;
     }
 
-    public off(event: 'sizechange', handler: (size: Size) => void) {
+    public off(event: 'sizechange', handler: (size: Size, prevSize: Size | null) => void) {
         this.listeners.delete(handler);
         if (this.listeners.size <= 0) {
             if (this.raf !== null) {

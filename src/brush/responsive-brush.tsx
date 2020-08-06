@@ -42,7 +42,7 @@ export class ResponsiveBrush<Datum> extends React.PureComponent<Props<Datum>, ne
         }
     };
 
-    private handleSizeChange = (size: Size) => {
+    private handleSizeChange = (size: Size, prevSize: Size | null) => {
         if (!this.eventedBrush) {
             return;
         }
@@ -52,6 +52,27 @@ export class ResponsiveBrush<Datum> extends React.PureComponent<Props<Datum>, ne
             return;
         }
         this.selection.call(this.eventedBrush);
+
+        if (!prevSize) {
+            return;
+        }
+        const node = this.selection.node();
+        if (!node) {
+            return;
+        }
+        const selection = D3Brush.brushSelection(node);
+
+        if (!selection) {
+            return;
+        }
+
+        const scaleX = size.width / prevSize.width;
+        const scaleY = size.height / prevSize.height;
+        if (Array.isArray(selection[0]) && Array.isArray(selection[1])) {
+            this.eventedBrush.move(this.selection, [[selection[0][0] * scaleX, selection[0][1] * scaleY], [selection[1][0] * scaleX, selection[1][1] * scaleY]]);
+        } else if (typeof selection[0] === 'number' && typeof selection[1] === 'number') {
+            this.eventedBrush.move(this.selection, [selection[0] * scaleX, selection[1] * scaleY]);
+        }
     };
 
     private handleStart = () => {
