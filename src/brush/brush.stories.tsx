@@ -128,7 +128,7 @@ export const brushDraw = () => {
     const handleClearClick = React.useCallback(
         () => {
             if (brushRef.current) {
-                brushRef.current.clearSelection();
+                brushRef.current.clear();
             }
             setSelectedRange(null);
         },

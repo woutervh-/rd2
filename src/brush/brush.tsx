@@ -73,10 +73,27 @@ export class Brush<Datum> extends React.PureComponent<Props<Datum>, never> {
         }
     }
 
-    public clearSelection() {
+    public move(selection: D3Brush.BrushSelection) {
+        if (this.eventedBrush && this.selection) {
+            this.eventedBrush.move(this.selection, selection);
+        }
+    }
+
+    public clear() {
         if (this.eventedBrush && this.selection) {
             this.eventedBrush.move(this.selection, null);
         }
+    }
+
+    public getSelection() {
+        if (!this.selection) {
+            return null;
+        }
+        const node = this.selection.node();
+        if (!node) {
+            return null;
+        }
+        return D3Brush.brushSelection(node);
     }
 
     public render() {

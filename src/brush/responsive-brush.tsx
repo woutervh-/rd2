@@ -52,6 +52,10 @@ export class ResponsiveBrush<Datum> extends React.PureComponent<Props<Datum>, ne
             return;
         }
         this.selection.call(this.eventedBrush);
+
+        // We could scale the current selection based on the previous and current size.
+        // However, this makes little sense when the scales of a plot are not scaled exactly in the same way.
+        // It's left to the user to move the selection when the plot changes its scales.
     };
 
     private handleStart = (event: D3Brush.D3BrushEvent<Datum>) => {
@@ -96,10 +100,27 @@ export class ResponsiveBrush<Datum> extends React.PureComponent<Props<Datum>, ne
         }
     }
 
-    public clearSelection() {
+    public move(selection: D3Brush.BrushSelection) {
+        if (this.eventedBrush && this.selection) {
+            this.eventedBrush.move(this.selection, selection);
+        }
+    }
+
+    public clear() {
         if (this.eventedBrush && this.selection) {
             this.eventedBrush.move(this.selection, null);
         }
+    }
+
+    public getSelection() {
+        if (!this.selection) {
+            return null;
+        }
+        const node = this.selection.node();
+        if (!node) {
+            return null;
+        }
+        return D3Brush.brushSelection(node);
     }
 
     public render() {
