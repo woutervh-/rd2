@@ -262,6 +262,11 @@ declare module 'd3-brush' {
          * The underlying input event, such as mousemove or touchmove.
          */
         sourceEvent: any;
+        /**
+         * The mode of the brush.
+         * Undefined for events that were fired from transitions.
+         */
+        mode: 'drag' | 'space' | 'handle' | 'center' | undefined;
     }
 
 }
