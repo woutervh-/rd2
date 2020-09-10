@@ -11,7 +11,7 @@ declare module 'd3-zoom' {
 
     // Last module patch version validated against: 2.0.0
 
-    import { ArrayLike, Selection, TransitionLike, ValueFn } from 'd3-selection';
+    import { ArrayLike, Selection, TransitionLike, ValueFn, EventFn } from 'd3-selection';
     import { ZoomView, ZoomInterpolator } from 'd3-interpolate';
 
     // --------------------------------------------------------------------------
@@ -712,7 +712,7 @@ declare module 'd3-zoom' {
          * start (after zooming begins [such as mousedown]), zoom (after a change to the zoom  transform [such as mousemove], or
          * end (after an active pointer becomes inactive [such as on mouseup].)
          */
-        on(typenames: string): ValueFn<ZoomRefElement, Datum, void> | undefined;
+        on(typenames: string): EventFn<ZoomRefElement, Datum, void, D3ZoomEvent<ZoomRefElement, Datum>> | undefined;
         /**
          * Remove the current event listeners for the specified typenames, if any, return the drag behavior.
          *
@@ -740,7 +740,7 @@ declare module 'd3-zoom' {
          * in order, being passed the current datum (d), the current index (i), and the current group (nodes),
          * with this as the current DOM element.
          */
-        on(typenames: string, listener: ValueFn<ZoomRefElement, Datum, void>): this;
+        on(typenames: string, listener: EventFn<ZoomRefElement, Datum, void, D3ZoomEvent<ZoomRefElement, Datum>>): this;
     }
 
     /**

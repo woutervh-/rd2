@@ -8,7 +8,7 @@ declare module 'd3-brush' {
 
     // Last module patch version validated against: 2.1.0
 
-    import { ArrayLike, Selection, TransitionLike, ValueFn } from 'd3-selection';
+    import { ArrayLike, Selection, TransitionLike, ValueFn, EventFn } from 'd3-selection';
 
     /**
      * Type alias for a BrushSelection. For a two-dimensional brush, it must be defined as [[x0, y0], [x1, y1]],
@@ -178,7 +178,7 @@ declare module 'd3-brush' {
          * start (at the start of a brush gesture, such as on mousedown), brush (when the brush moves, such as on mousemove), or
          * end (at the end of a brush gesture, such as on mouseup.)
          */
-        on(typenames: string): ValueFn<SVGGElement, Datum, void> | undefined;
+        on(typenames: string): EventFn<SVGGElement, Datum, void, D3BrushEvent<Datum>> | undefined;
         /**
          * Removes the current event listeners for the specified typenames, if any.
          *
@@ -205,7 +205,7 @@ declare module 'd3-brush' {
          * in order, being passed the current datum (d), the current index (i), and the current group (nodes),
          * with this as the current DOM element.
          */
-        on(typenames: string, listener: ValueFn<SVGGElement, Datum, void>): this;
+        on(typenames: string, listener: EventFn<SVGGElement, Datum, void, D3BrushEvent<Datum>>): this;
     }
 
     /**
