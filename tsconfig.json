@@ -7,11 +7,16 @@
         "module": "ES6",
         "strict": true,
         "noUnusedLocals": true,
+        "esModuleInterop": true,
         "declaration": true,
         "jsx": "react",
         "lib": [
             "dom",
             "ES7"
+        ],
+        "typeRoots": [
+            "node_modules/@types",
+            "@types"
         ]
     }
 }

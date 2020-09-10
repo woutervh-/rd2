@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import * as D3Scale from 'd3-scale';
 import * as D3Axis from 'd3-axis';
 import * as D3Shape from 'd3-shape';

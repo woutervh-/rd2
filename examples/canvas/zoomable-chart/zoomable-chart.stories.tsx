@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import * as D3Scale from 'd3-scale';
 import * as D3Axis from 'd3-axis';
 import * as D3Shape from 'd3-shape';
@@ -139,9 +139,7 @@ export const zoomableChart = () => {
                 return;
             }
 
-            const zoomed = () => {
-                // Global event is untyped. Refactor once https://github.com/d3/d3-selection/issues/191 is released.
-                const event = D3Selection.event as D3Zoom.D3ZoomEvent<HTMLCanvasElement, unknown>; // eslint-disable-line @typescript-eslint/consistent-type-assertions
+            const zoomed = (event: D3Zoom.D3ZoomEvent<HTMLCanvasElement, unknown>) => {
                 setTransform(event.transform);
             };
 

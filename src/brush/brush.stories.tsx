@@ -7,9 +7,7 @@ import { Axis } from '../axis/axis';
 
 export default { title: 'Brush' };
 
-let d3Brush = D3Brush.brush();
-// Need to cast to any until PR is merged: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/42649
-d3Brush = (d3Brush as any).keyModifiers(false); // eslint-disable-line @typescript-eslint/consistent-type-assertions, @typescript-eslint/no-explicit-any
+const d3Brush = D3Brush.brush().keyModifiers(false);
 
 export const brushZoom = () => {
     const [showBrush, setShowBrush] = React.useState(false);
