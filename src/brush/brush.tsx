@@ -31,25 +31,19 @@ export class Brush<Datum> extends React.PureComponent<Props<Datum>, never> {
         }
     };
 
-    private handleStart = () => {
-        // Global event is untyped. Refactor once https://github.com/d3/d3-selection/issues/191 is released.
-        const event = D3Selection.event as D3Brush.D3BrushEvent<Datum>; // eslint-disable-line @typescript-eslint/consistent-type-assertions
+    private handleStart = (event: D3Brush.D3BrushEvent<Datum>) => {
         if (this.props.onStart) {
             this.props.onStart(event);
         }
     };
 
-    private handleBrush = () => {
-        // Global event is untyped. Refactor once https://github.com/d3/d3-selection/issues/191 is released.
-        const event = D3Selection.event as D3Brush.D3BrushEvent<Datum>; // eslint-disable-line @typescript-eslint/consistent-type-assertions
+    private handleBrush = (event: D3Brush.D3BrushEvent<Datum>) => {
         if (this.props.onBrush) {
             this.props.onBrush(event);
         }
     };
 
-    private handleEnd = () => {
-        // Global event is untyped. Refactor once https://github.com/d3/d3-selection/issues/191 is released.
-        const event = D3Selection.event as D3Brush.D3BrushEvent<Datum>; // eslint-disable-line @typescript-eslint/consistent-type-assertions
+    private handleEnd = (event: D3Brush.D3BrushEvent<Datum>) => {
         if (this.props.onEnd) {
             this.props.onEnd(event);
         }
