@@ -53,8 +53,8 @@ export class SizeObserver {
     public static getSize(element: Element): Size {
         const bounds = element.getBoundingClientRect();
         return {
-            width: bounds.width,
-            height: bounds.height
+            width: Math.ceil(bounds.width),
+            height: Math.ceil(bounds.height)
         };
     }
 }
